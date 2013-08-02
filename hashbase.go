@@ -53,6 +53,7 @@ func Sha224base64(item []byte) (string, []byte) {
 	return base64.StdEncoding.EncodeToString(phashbytes), phashbytes
 }
 
+// Un64 decodes a base-64 encoded hash string and returns a byte array or an error.
 func Un64( hash64val string) ([]byte, error){
 	return base64.StdEncoding.DecodeString(hash64val)
 }

@@ -53,6 +53,10 @@ func Sha224base64(item []byte) (string, []byte) {
 	return base64.StdEncoding.EncodeToString(phashbytes), phashbytes
 }
 
+func Un64( hash64val string) ([]byte, error){
+	return base64.StdEncoding.DecodeString(hash64val)
+}
+
 // Sign64 signs a byte array with a private key.
 func Sign64(rsakey *rsa.PrivateKey, item []byte) (string, []byte) {
 

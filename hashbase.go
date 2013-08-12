@@ -92,3 +92,97 @@ func GetPKI() (*rsa.PrivateKey, []byte, error) {
 	return rsakey, rputn_rsa_pub, nil
 }
 
+// HashPersister provides access to hash storage
+type HashPersister interface {
+   Assert( string, string, string ) error
+   Query( string ) (string, error)
+   Load( io.Reader ) error
+   Unload(io.Writer ) error
+   Init() bool
+}
+
+// WatchableHashPersister adds watching for assertions on hashes in a HashPersister
+type WatchableHashPersister interface {
+   HashPersister 
+   Watch() int
+   Unwatch() int
+}
+
+
+// LocalFileHashes keeps hash information in a local file
+type LocalFileHashes struct {
+   length, width int
+}
+
+func (lfh LocalFileHashes) Assert() int {
+   return 1
+}
+
+func (lfh LocalFileHashes) Query() int {
+   return 1
+}
+
+func (lfh LocalFileHashes) Load( f io.Reader ) error {
+   return nil
+}
+
+func (lfh LocalFileHashes) Unload(f io.Writer ) error {
+   return nil
+}
+
+
+// RawDiskHashes keeps hash information in raw disk partitions
+type RawDiskHashes struct {
+   length, width int
+}
+
+// RemotelyStoredHashes uses remote HashPersisters to satisfy requests
+type RemotelyStoredHashes struct {
+   length, width int
+}
+
+// MigratingStoreHashes moves hashes between tiers of HashPersisters
+type MigratingStoreHashes struct {
+   length, width int
+}
+
+// LoadBalancingHashes divides hashes between HashPersisters
+type LoadBalancingHashes struct {
+   length, width int
+}
+
+// FaultTolerantHashes replicates hashes to HashPersisters
+type FaultTolerantHashes struct {
+   length, width int
+}
+
+
+
+//type Rectangle struct {
+//   length, width int
+//}
+
+//func (r Rectangle) Area() int {
+//   return r.length * r.width
+//}
+
+//type Square struct {
+//   side int
+//}
+
+//func (sq Square) Area() int {
+//   return sq.side * sq.side
+//}
+
+//func main() {
+//   r := Rectangle{length:5, width:3}
+//   q := Square{side:5}
+//   shapesArr := [...]HashPersister{r, q}
+//
+//   fmt.Println("Looping through shapes for area ...")
+//   for n, _ := range shapesArr {
+//       fmt.Println("Shape details: ", shapesArr[n])
+//       fmt.Println("Area of this shape is: ", shapesArr[n].Area())
+//   }
+//}
+
